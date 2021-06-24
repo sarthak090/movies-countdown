@@ -4,77 +4,91 @@ import Header from "../../components/Layout/Header";
 import useCountDown from "../../hooks/useCountDown";
 import moment from "moment";
 
-export default function MoviePage({ movieData }) {
-  const { overview, genres, tagline, release_date, videos } = movieData;
+export default function MoviePage({ movieData, error }) {
+  if (typeof movieData == "object") {
+    const { showReleaseDate, coundownText } = useCountDown(
+      movieData.release_date
+    );
+    const { overview, genres, tagline, release_date, videos } = movieData;
 
-  const { showReleaseDate, coundownText } = useCountDown(release_date);
+    return (
+      <>
+        <Header />
 
-  return (
-    <>
-      <Header />
-
-      <div className="relative block h-96 mb-8">
-        <div
-          className="absolute w-full h-96 top-0   "
-          style={{
-            background: `linear-gradient(
+        <div className="relative block h-96 mb-8">
+          <div
+            className="absolute w-full h-96 top-0   "
+            style={{
+              background: `linear-gradient(
                   rgba(0, 0, 0, 0.62),
                    rgba(0, 0, 0, 0.62)
                 ),url(https://image.tmdb.org/t/p/original${movieData.backdrop_path})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
 
-            backgroundPosition: "center",
-            zIndex: -5,
-          }}
-        >
-          <section className="text-gray-100 h-full  text-center flex flex-col justify-center ">
-            <h1 className="text-3xl md:text-6xl my-4 text-gray-50">
-              {movieData.title}
-            </h1>
-            <p className="my-4">{tagline}</p>
-
-            <h2 className="text-2xl md:text-5xl block">
-              {showReleaseDate ? coundownText : release_date}
-            </h2>
-          </section>
-        </div>
-      </div>
-
-      <main className="mx-auto container relative px-2 md:px-8">
-        {videos.results && (
-          <a
-            href={`https://www.youtube.com/watch?v=${videos.results[0].key}`}
-            target="_blank"
-            rel="noreferrer"
+              backgroundPosition: "center",
+              zIndex: -5,
+            }}
           >
-            <button className="p-3 bg-indigo-500 text-gray-100 rounded-md my-4 focus:outline-none">
-              Watch Trailer
-            </button>
-          </a>
-        )}
+            <section className="text-gray-100 h-full  text-center flex flex-col justify-center ">
+              <h1 className="text-3xl md:text-6xl my-4 text-gray-50">
+                {movieData.title}
+              </h1>
+              <p className="my-4">{movieData.tagline}</p>
 
-        {movieData.overview && (
-          <section className="my-4">
-            <h3 className="text-3xl font-semibold mb-4">Plot</h3>
-            <p>{overview}</p>
-          </section>
-        )}
-        <section className="my-4">
-          <h4 className="text-3xl font-semibold mb-4">Genres</h4>
-          <div className="flex gap-2">
-            {genres.map((genre) => (
-              <div key={genre.id}>{genre.name}</div>
-            ))}
+              <h2 className="text-2xl md:text-5xl block">
+                {showReleaseDate && coundownText}
+              </h2>
+            </section>
           </div>
-        </section>
-        <section className="my-4">
-          <h5 className="text-3xl font-semibold mb-4">Release Date</h5>
-          <div className="flex gap-2">{getDate(release_date)}</div>
-        </section>
-      </main>
-    </>
-  );
+        </div>
+
+        <main className="mx-auto container relative px-2 md:px-8">
+          {movieData.videos.results && (
+            <>
+              {movieData.videos.results.length > 0 ? (
+                <a
+                  href={`https://www.youtube.com/watch?v=${movieData.videos.results[0].key}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="p-3 bg-indigo-500 text-gray-100 rounded-md my-4 focus:outline-none">
+                    Watch Trailer
+                  </button>
+                </a>
+              ) : (
+                ""
+              )}
+            </>
+          )}
+
+          {movieData.overview && (
+            <section className="my-4">
+              <h3 className="text-3xl font-semibold mb-4">Plot</h3>
+              <p>{movieData.overview}</p>
+            </section>
+          )}
+          <section className="my-4">
+            <h4 className="text-3xl font-semibold mb-4">Genres</h4>
+            <div className="flex gap-2">
+              {movieData.genres.map((genre) => (
+                <div key={genre.id}>{genre.name}</div>
+              ))}
+            </div>
+          </section>
+          {movieData && (
+            <section className="my-4">
+              <h5 className="text-3xl font-semibold mb-4">Release Date</h5>
+              <div className="flex gap-2">
+                {getDate(movieData.release_date)}
+              </div>
+            </section>
+          )}
+        </main>
+      </>
+    );
+  }
+  return <div>Not Found</div>;
 }
 
 export const getStaticPaths = async () => {
@@ -89,9 +103,10 @@ export const getStaticPaths = async () => {
     .filter((v) => v)
     .map((movie, i) => {
       return {
-        params: { slug: getSlug(movie.title, movie.id) },
+        params: { slug: getSlug(movie.title, movie.id).toString() },
       };
     });
+
   return {
     paths,
     fallback: true,
@@ -108,6 +123,14 @@ export const getStaticProps = async (ctx) => {
 
   const res = await fetch(url).then();
   const data = await res.json();
+  if (data == undefined) {
+    return {
+      props: {
+        error: true,
+        movieData: null,
+      },
+    };
+  }
 
   return {
     props: {
