@@ -39,35 +39,7 @@ export default function Header() {
           />
         </svg>
       </div>
-      <nav className=" md:mt-0 transition delay-300 ease-out md:px-4">
-        {/* <ul
-          id="menu"
-          className=" bg-gray-800 w-full py-4 md:py-0 md:mt-0 z-40 absolute   md:relative  md:bg-gray-900 mt-3 pl-4   flex flex-col hidden md:flex   md:flex-row m-0 p-0  text-lg md:items-center gap-8"
-        >
-          <li>
-            <Link href="/tv-shows">
-              <a href="/tv-shows" className="hover:text-blue-400 ">
-                Tv-Shows
-              </a>
-            </Link>
-          </li>
-          <li>
-            <a href="/about" className="hover:text-blue-400 ">
-              About Us
-            </a>
-          </li>
-          <li>
-            <a href="/contact" className="hover:text-blue-400">
-              Contact Us
-            </a>
-          </li>
-          <li>
-            <a href="/privacy-policy" className="hover:text-blue-400 ">
-              Privacy policy
-            </a>
-          </li>
-        </ul> */}
-      </nav>
+      <nav className=" md:mt-0 transition delay-300 ease-out md:px-4"></nav>
     </header>
   );
 }
