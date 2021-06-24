@@ -1,16 +1,15 @@
-import { getSlug } from "../../utils/get-slug";
-import { getDate } from "../../utils/get-date";
 import Header from "../../components/Layout/Header";
 import useCountDown from "../../hooks/useCountDown";
-import { NextSeo } from "next-seo";
 import moment from "moment";
+import { getSlug } from "../../utils/get-slug";
+import { getDate } from "../../utils/get-date";
+import { NextSeo } from "next-seo";
 
-export default function MoviePage({ movieData, error }) {
+export default function MoviePage({ movieData }) {
   if (typeof movieData == "object") {
     const { showReleaseDate, coundownText } = useCountDown(
       movieData.release_date
     );
-    const { overview, genres, tagline, release_date, videos } = movieData;
 
     return (
       <>
@@ -120,8 +119,8 @@ export default function MoviePage({ movieData, error }) {
 
 export const getStaticPaths = async () => {
   const currentDate = moment().format("YYYY-MM-DD");
-  const lastDate = moment().endOf("year").format("YYYY-MM-DD");
-  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_TMDB_API}&primary_release_date.gte=${currentDate}&primary_release_date.lte=${lastDate}&language=en-US&page=1`;
+  const endDate = moment().endOf("year").format("YYYY-MM-DD");
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_TMDB_API}&primary_release_date.gte=${currentDate}&primary_release_date.lte=${endDate}&language=en-US&page=1`;
   const res = await fetch(url);
   const moviesRes = await res.json();
   const movies = moviesRes.results;

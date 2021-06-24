@@ -1,2 +1,4 @@
 User-agent: *
-Sitemap: https://leerob.io/sitemap.xml
+Allow: /
+
+Sitemap: https://movies-countdown.vercel.app/api/sitemap_movies
