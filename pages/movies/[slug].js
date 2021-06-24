@@ -46,7 +46,7 @@ export default function MoviePage({ movieData }) {
           <a
             href={`https://www.youtube.com/watch?v=${videos.results[0].key}`}
             target="_blank"
-            rel="noopener"
+            rel="noreferrer"
           >
             <button className="p-3 bg-indigo-500 text-gray-100 rounded-md my-4 focus:outline-none">
               Watch Trailer
