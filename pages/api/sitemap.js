@@ -12,7 +12,7 @@ const handler = async (req, res) => {
   res.write(createSitemap(movies));
   res.end();
 };
-const YOUR_SITENAME_WITH_PATH = "https://jsonplaceholder.typicode.com/movies";
+const YOUR_SITENAME = process.env.NEXT_PUBLIC_DOMAIN_NAME;
 
 const createSitemap = (movies) => `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -20,7 +20,7 @@ const createSitemap = (movies) => `<?xml version="1.0" encoding="UTF-8"?>
           .map(({ title, id }) => {
             return `
                     <url>
-                        <loc>${`${YOUR_SITENAME_WITH_PATH}/${getSlug(
+                        <loc>${`${YOUR_SITENAME}/movies/${getSlug(
                           title,
                           id
                         )}`}</loc>
