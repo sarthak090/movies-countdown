@@ -1,6 +1,7 @@
 import Header from "../components/Layout/Header";
 import moment from "moment";
 import Movie from "../components/Movie";
+
 export default function Home({ movies }) {
   return (
     <>

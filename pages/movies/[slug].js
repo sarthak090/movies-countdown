@@ -2,6 +2,7 @@ import { getSlug } from "../../utils/get-slug";
 import { getDate } from "../../utils/get-date";
 import Header from "../../components/Layout/Header";
 import useCountDown from "../../hooks/useCountDown";
+import { NextSeo } from "next-seo";
 import moment from "moment";
 
 export default function MoviePage({ movieData, error }) {
@@ -13,6 +14,32 @@ export default function MoviePage({ movieData, error }) {
 
     return (
       <>
+        <NextSeo
+          title={`Watch ${movieData.title}`}
+          description={movieData.overview}
+          canonical={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/movies/${getSlug(
+            movieData.title,
+            movieData.id
+          )}`}
+          openGraph={{
+            url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/movies/${getSlug(
+              movieData.title,
+              movieData.id
+            )}`,
+            type: "video.movie",
+            title: `Watch ${movieData.title}`,
+            description: movieData.overview,
+            locale: "en_US",
+            images: [
+              {
+                url: `https://image.tmdb.org/t/p/original${movieData.backdrop_path}`,
+                width: 1280,
+                height: 720,
+                alt: `Watch ${movieData.title}`,
+              },
+            ],
+          }}
+        />
         <Header />
 
         <div className="relative block h-96 mb-8">
