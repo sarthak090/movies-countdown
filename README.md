@@ -3,23 +3,27 @@ This is a Project created with next js and tmdb api to show list of all the upco
 
 
 Check out live demo at [Movies Countdown](https://movies-countdown.vercel.app) for more details.
+
 ## Features
+- Built with Next js
+
 - Build With Tailwind CSS so you can customize this as per your requirement
 - All Pages Are statically generated 
 - Custom Hook is implemented for resusability
 - Image is optimized with ``next/image`` for optimization
-- SEO is included
-- Dynamic sitemap is included at `/api/sitemap_movies`  or `/sitemap.xml`
-- robots.txt file is included
+- SEO friendly with proper meta tags
+- [Sitemap](https://movies-countdown.vercel.app/api/sitemap_movies) is included
+- [Robots.txt](https://movies-countdown.vercel.app/robots.txt) is included
 
 
 ## Setup 
 
-- Clone the repo 
-- Run ``yarn install`` to install all the required packages
-- Get Tmdb api from there website
-- Paste that api in ``.env`` file with name of NEXT_TMDB_API
-- Uncomment NEXT_PUBLIC_DOMAIN_NAME variable in ``.env`` file
+- Clone the Repo
+- run ``yarn install ``
+- Get Tmdb api from [here](https://www.themoviedb.org/settings/api)
+- Paste it in `.env` file under `NEXT_TMDB_API`
+- run `yarn dev`    
+
   
 ## Running the server 
 
