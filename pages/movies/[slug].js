@@ -16,15 +16,13 @@ export default function MoviePage({ movieData }) {
         <NextSeo
           title={`Watch ${movieData.title}`}
           description={movieData.overview}
-          canonical={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/movies/${getSlug(
-            movieData.title,
-            movieData.id
-          )}`}
+          canonical={`${
+            process.env.NEXT_PUBLIC_DOMAIN_NAME || "http://example.com"
+          }/movies/${getSlug(movieData.title, movieData.id)}`}
           openGraph={{
-            url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/movies/${getSlug(
-              movieData.title,
-              movieData.id
-            )}`,
+            url: `${
+              process.env.NEXT_PUBLIC_DOMAIN_NAME || "http://example.com"
+            }/movies/${getSlug(movieData.title, movieData.id)}`,
             type: "video.movie",
             title: `Watch ${movieData.title}`,
             description: movieData.overview,
@@ -57,10 +55,10 @@ export default function MoviePage({ movieData }) {
             }}
           >
             <section className="text-gray-100 h-full  text-center flex flex-col justify-center ">
-              <h1 className="text-3xl md:text-6xl my-4 text-gray-50">
+              <h1 className="text-4xl md:text-6xl my-4 text-gray-50">
                 {movieData.title}
               </h1>
-              <p className="my-4">{movieData.tagline}</p>
+              <p className="text-sm italic my-4">{movieData.tagline}</p>
 
               <h2 className="text-2xl md:text-5xl block">
                 {showReleaseDate && coundownText}
@@ -78,7 +76,7 @@ export default function MoviePage({ movieData }) {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="p-3 bg-indigo-500 text-gray-100 rounded-md my-4 focus:outline-none">
+                  <button className="p-3 bg-indigo-500 text-gray-100  my-4 focus:outline-none">
                     Watch Trailer
                   </button>
                 </a>
@@ -120,6 +118,7 @@ export default function MoviePage({ movieData }) {
 export const getStaticPaths = async () => {
   const currentDate = moment().format("YYYY-MM-DD");
   const endDate = moment().endOf("year").format("YYYY-MM-DD");
+
   const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_TMDB_API}&primary_release_date.gte=${currentDate}&primary_release_date.lte=${endDate}&language=en-US&page=1`;
   const res = await fetch(url);
   const moviesRes = await res.json();
@@ -141,6 +140,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (ctx) => {
   const slug = ctx.params !== undefined ? ctx.params.slug : "";
+
   const url = `https://api.themoviedb.org/3/movie/${slug
     .split("-")
     .pop()}?api_key=${

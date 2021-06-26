@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <DefaultSeo
         title="Movies Countdowner"
-        canonical={process.env.NEXT_PUBLIC_DOMAIN_NAME}
+        canonical={process.env.NEXT_PUBLIC_DOMAIN_NAME || "http://example.com"}
         description="Get Countdown of all the upcoming movies this year , with full information about there cast ,crew, budget and much more"
         {...SEO}
       />

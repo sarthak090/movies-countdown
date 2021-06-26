@@ -4,7 +4,7 @@ export default function useCountDown(initalTime) {
   const [coundownText, setCountDownText] = useState("");
   const [showReleaseDate, setShowReleaseDate] = useState(true);
   const getCountDown = (rDate) => {
-    let eventTime, duration, interval, intervalId;
+    let eventTime, duration, interval;
     interval = 1000;
     eventTime = moment(rDate, "YYYY-MM-DD");
     duration = moment.duration(eventTime.diff(moment()));

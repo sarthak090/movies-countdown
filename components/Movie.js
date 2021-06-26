@@ -11,9 +11,9 @@ export default function Movie({ movie }) {
       {showReleaseDate && (
         <div
           key={movie.id}
-          className="flex sm:flex-row gap-3 border border-gray-300 relative"
+          className="flex flex-col sm:flex-row gap-3 border border-gray-300 relative"
         >
-          <div className="flex  flex-shrink-0">
+          <div className="flex justify-center flex-shrink-0">
             <Image
               alt={movie.title}
               src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
@@ -22,13 +22,19 @@ export default function Movie({ movie }) {
             />
           </div>
 
-          <div className="px-3">
-            <p className="text-3xl font-semibold mb-2">{movie.title}</p>
+          <div className="p-3">
+            <p className="text-3xl font-semibold mb-2">
+              <Link href={`/movies/${getSlug(movie.title, movie.id)}`}>
+                <a href={`/movies/${getSlug(movie.title, movie.id)}`}>
+                  {movie.title}
+                </a>
+              </Link>
+            </p>
             <p>
               {movie.overview && (
                 <>
-                  <span className="block  text-2xl">Plot</span>
-                  {getOverView(movie.overview, 15)}..
+                  <span className="block  text-xl font-semibold">Plot</span>
+                  {getOverView(movie.overview, 10)}..
                   <Link href={`/movies/${getSlug(movie.title, movie.id)}`}>
                     <a
                       href={`/movies/${getSlug(movie.title, movie.id)}`}
@@ -58,7 +64,7 @@ export default function Movie({ movie }) {
               </svg>
               {coundownText}
             </p>
-            <div className="my-2">
+            {/* <div className="my-2">
               <Link href={`/movies/${getSlug(movie.title, movie.id)}`}>
                 <a
                   href={`/movies/${getSlug(movie.title, movie.id)}`}
@@ -69,7 +75,7 @@ export default function Movie({ movie }) {
                   </button>
                 </a>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
