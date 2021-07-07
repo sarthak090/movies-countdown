@@ -1,6 +1,7 @@
 import Header from "../../components/Layout/Header";
 import useCountDown from "../../hooks/useCountDown";
 import moment from "moment";
+import tmdb from "../../configs/tmdb";
 import { getSlug } from "../../utils/get-slug";
 import { getDate } from "../../utils/get-date";
 import { NextSeo } from "next-seo";
@@ -116,13 +117,17 @@ export default function MoviePage({ movieData }) {
 }
 
 export const getStaticPaths = async () => {
-  const currentDate = moment().format("YYYY-MM-DD");
-  const endDate = moment().endOf("year").format("YYYY-MM-DD");
-
-  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_TMDB_API}&primary_release_date.gte=${currentDate}&primary_release_date.lte=${endDate}&language=en-US&page=1`;
-  const res = await fetch(url);
-  const moviesRes = await res.json();
-  const movies = moviesRes.results;
+  const m = await tmdb.discoverMovies([
+    {
+      param: "primary_release_date.gte",
+      value: moment().format("YYYY-MM-DD"),
+    },
+    {
+      param: "primary_release_date.lte",
+      value: moment().endOf("year").format("YYYY-MM-DD"),
+    },
+  ]);
+  const movies = m.results;
 
   const paths = movies
     .filter((v) => v)
@@ -141,26 +146,22 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async (ctx) => {
   const slug = ctx.params !== undefined ? ctx.params.slug : "";
 
-  const url = `https://api.themoviedb.org/3/movie/${slug
-    .split("-")
-    .pop()}?api_key=${
-    process.env.NEXT_TMDB_API
-  }&language=en-US&append_to_response=credits,videos`;
+  try {
+    const movie = await tmdb.movie(slug.split("-").pop(), {
+      append: ["videos", "credits"],
+    });
 
-  const res = await fetch(url).then();
-  const data = await res.json();
-  if (data == undefined) {
+    return {
+      props: {
+        movieData: movie,
+      },
+    };
+  } catch (err) {
+    console.log(`Error: `, err);
     return {
       props: {
         error: true,
-        movieData: null,
       },
     };
   }
-
-  return {
-    props: {
-      movieData: data,
-    },
-  };
 };

@@ -1,12 +1,23 @@
 import moment from "moment";
+import tmdb from "../../configs/tmdb";
 import { getSlug } from "../../utils/get-slug";
+
 const handler = async (req, res) => {
   const currentDate = moment().format("YYYY-MM-DD");
-  const lastDate = moment().endOf("year").format("YYYY-MM-DD");
+  const lastDate = moment().endOf("year").format("YYYY-MM-DD"); // last date of the year
   const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_TMDB_API}&primary_release_date.gte=${currentDate}&primary_release_date.lte=${lastDate}&language=en-US&page=1`;
-  const resp = await fetch(url);
-  const moviesRes = await resp.json();
-  const movies = moviesRes.results;
+  const resp = await tmdb.discoverMovies([
+    {
+      param: "primary_release_date.gte",
+      value: currentDate,
+    },
+    {
+      param: "primary_release_date.lte",
+      value: lastDate,
+    },
+  ]);
+  // const moviesRes = await resp.json();
+  const movies = resp.results;
 
   res.setHeader("Content-Type", "text/xml");
   res.write(createSitemap(movies));

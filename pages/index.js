@@ -1,7 +1,7 @@
 import Header from "../components/Layout/Header";
 import moment from "moment";
 import Movie from "../components/Movie";
-
+import tmdb from "../configs/tmdb";
 export default function Home({ movies }) {
   return (
     <>
@@ -21,13 +21,20 @@ export default function Home({ movies }) {
 export const getStaticProps = async () => {
   const currentDate = moment().format("YYYY-MM-DD");
   const endDate = moment().endOf("year").format("YYYY-MM-DD"); //Last date of current year
+  const moviesResp = await tmdb.discoverMovies([
+    {
+      param: "primary_release_date.gte",
+      value: currentDate,
+    },
+    {
+      param: "primary_release_date.lte",
+      value: endDate,
+    },
+  ]);
 
-  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_TMDB_API}&primary_release_date.gte=${currentDate}&primary_release_date.lte=${endDate}&language=en-US&page=1`;
-  const res = await fetch(url);
-  const movies = await res.json();
   return {
     props: {
-      movies: movies.results,
+      movies: moviesResp.results,
     },
   };
 };
