@@ -145,7 +145,10 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (ctx) => {
   const slug = ctx.params !== undefined ? ctx.params.slug : "";
-
+  /**
+   * url without moviestmdb package
+   * `https://api.themoviedb.org/3/movie/${slug.split("-").pop()}?api_key=${process.env.NEXT_TMDB_API}&language=en-US&append_to_response=credits,videos`;
+   */
   try {
     const movie = await tmdb.movie(slug.split("-").pop(), {
       append: ["videos", "credits"],
@@ -157,7 +160,6 @@ export const getStaticProps = async (ctx) => {
       },
     };
   } catch (err) {
-    console.log(`Error: `, err);
     return {
       props: {
         error: true,

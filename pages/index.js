@@ -21,6 +21,13 @@ export default function Home({ movies }) {
 export const getStaticProps = async () => {
   const currentDate = moment().format("YYYY-MM-DD");
   const endDate = moment().endOf("year").format("YYYY-MM-DD"); //Last date of current year
+
+  /**
+  * If you don't want to use moviestmdb package then url will be this
+  * https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_TMDB_API}&primary_release_date.gte=${currentDate}&primary_release_date.lte=${endDate}&language=en-US&page=1
+
+  */
+
   const moviesResp = await tmdb.discoverMovies([
     {
       param: "primary_release_date.gte",
